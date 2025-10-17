@@ -230,6 +230,9 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import crypto from "crypto";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 function generateCodeVerifier(): string {
   return crypto.randomBytes(32).toString("base64url");
 }
