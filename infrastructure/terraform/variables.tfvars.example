@@ -1,0 +1,19 @@
+# Copy this file to variables.tfvars and fill in your values
+
+# Vercel
+vercel_api_token = "your_vercel_api_token"
+
+# Supabase
+supabase_access_token = "your_supabase_access_token"
+
+# Project Configuration
+project_name = "ai-social-saas"
+github_repo  = "your-username/your-repo"
+
+# Stripe
+stripe_publishable_key = "pk_test_..."
+stripe_secret_key     = "sk_test_..."
+
+# Google OAuth
+google_client_id     = "your_google_client_id"
+google_client_secret = "your_google_client_secret"
