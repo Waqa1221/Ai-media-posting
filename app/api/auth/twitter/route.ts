@@ -244,23 +244,29 @@ function generateCodeChallenge(verifier: string): string {
 
 export async function GET(req: Request) {
   try {
-    const { searchParams, origin, hostname } = new URL(req.url);
-    const code = searchParams.get("code");
-    const error = searchParams.get("error");
+    console.log("🔵 Twitter OAuth initiation started");
 
     // Check environment variables
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || "https://mntomfordigitalllc.com";
     const clientId = process.env.TWITTER_CLIENT_ID;
     const clientSecret = process.env.TWITTER_CLIENT_SECRET;
 
-    if (!siteUrl || !clientId || !clientSecret) {
-      console.error("❌ Missing environment variables");
+    console.log("🔧 Config check:", {
+      hasSiteUrl: !!siteUrl,
+      hasClientId: !!clientId,
+      hasClientSecret: !!clientSecret,
+      siteUrl,
+    });
+
+    if (!clientId || !clientSecret) {
+      console.error("❌ Missing Twitter API credentials");
       return NextResponse.redirect(
         new URL(
           `/dashboard/social-accounts?error=twitter_config&message=${encodeURIComponent(
-            "Configuration error. Please contact support."
+            "Twitter API credentials not configured"
           )}`,
-          siteUrl || "https://mntomfordigitalllc.com"
+          siteUrl
         )
       );
     }
@@ -268,24 +274,27 @@ export async function GET(req: Request) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
 
-    // Handle OAuth errors from Twitter
-    if (error) {
-      console.error("❌ Twitter OAuth error:", error);
-      return NextResponse.redirect(
-        new URL(`/dashboard/social-accounts?error=twitter_${error}`, siteUrl)
-      );
-    }
-
-    // This endpoint only initiates OAuth, not handles callback
+    // Get authenticated user
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
 
+    console.log("👤 User check:", {
+      hasUser: !!user,
+      userId: user?.id,
+      error: authError?.message,
+    });
+
     if (authError || !user) {
       console.error("❌ No user session");
       return NextResponse.redirect(
-        new URL(`/auth/signin?redirect=${encodeURIComponent(req.url)}`, siteUrl)
+        new URL(
+          `/auth/signin?redirect=${encodeURIComponent(
+            "/dashboard/social-accounts"
+          )}`,
+          siteUrl
+        )
       );
     }
 
@@ -300,6 +309,8 @@ export async function GET(req: Request) {
     )}&scope=${encodeURIComponent(scope)}&state=${
       user.id
     }&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+
+    console.log("✅ Redirecting to Twitter:", { redirectUri });
 
     const response = NextResponse.redirect(authUrl);
 
@@ -322,14 +333,17 @@ export async function GET(req: Request) {
 
     return response;
   } catch (err) {
-    console.error("💥 Unexpected error:", err);
+    console.error("💥 Unexpected error in Twitter OAuth initiation:", err);
     const baseUrl =
-      process.env.NODE_ENV === "production"
-        ? process.env.NEXT_PUBLIC_SITE_URL!
-        : "http://localhost:3000";
+      process.env.NEXT_PUBLIC_SITE_URL || "https://mntomfordigitalllc.com";
 
     return NextResponse.redirect(
-      new URL(`/dashboard/social-accounts?error=twitter_general`, baseUrl)
+      new URL(
+        `/dashboard/social-accounts?error=twitter_general&message=${encodeURIComponent(
+          err instanceof Error ? err.message : "Unknown error occurred"
+        )}`,
+        baseUrl
+      )
     );
   }
 }
