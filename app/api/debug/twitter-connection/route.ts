@@ -119,7 +119,7 @@ export async function GET(req: Request) {
       // Get cookies and create Supabase client
       const cookieStore = cookies();
       const supabase = createClient(cookieStore);
-      
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -289,7 +289,7 @@ export async function POST(req: Request) {
     // Get cookies and create Supabase client
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
