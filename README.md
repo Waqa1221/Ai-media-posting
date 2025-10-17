@@ -5,12 +5,14 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 ## Features
 
 ### 🔐 OAuth 2.0 Authentication
+
 - Secure OAuth 2.0 flow with PKCE (Proof Key for Code Exchange)
 - CSRF protection with state tokens
 - Token refresh management
 - Multi-platform support
 
 ### 📱 Supported Platforms
+
 - Instagram (Facebook Graph API)
 - LinkedIn
 - Facebook
@@ -19,6 +21,7 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 - Pinterest
 
 ### 📝 Post Management
+
 - Create, edit, and delete posts
 - Schedule posts for future publishing
 - Immediate publishing
@@ -27,12 +30,14 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 - Hashtag and mention management
 
 ### 📊 Analytics & Insights
+
 - Real-time engagement metrics
 - Performance tracking
 - Analytics synchronization
 - Historical data storage
 
 ### 🔒 Security Features
+
 - Row Level Security (RLS) policies
 - Encrypted token storage
 - IP address and user agent tracking
@@ -59,6 +64,7 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 5. **post_analytics** - Performance metrics
 
 ### Key Features
+
 - Automatic timestamp updates
 - Comprehensive indexing
 - Foreign key constraints
@@ -68,16 +74,19 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 ## API Endpoints
 
 ### Authentication
+
 - `GET /api/social/oauth/initiate` - Start OAuth flow
 - `GET /api/social/oauth/callback` - Handle OAuth callback
 
 ### Account Management
+
 - `GET /api/social/accounts` - List connected accounts
 - `POST /api/social/accounts` - Connect new account
 - `PATCH /api/social/accounts/[id]` - Update account
 - `DELETE /api/social/accounts/[id]` - Disconnect account
 
 ### Post Management
+
 - `GET /api/social/posts` - List posts
 - `POST /api/social/posts` - Create post
 - `GET /api/social/posts/[id]` - Get post details
@@ -85,6 +94,7 @@ A comprehensive social media integration system built with Next.js, Supabase, an
 - `DELETE /api/social/posts/[id]` - Delete post
 
 ### Platform Information
+
 - `GET /api/social/platforms` - List available platforms
 
 ## Setup Instructions
@@ -120,23 +130,27 @@ INSTAGRAM_CLIENT_SECRET=your_instagram_client_secret
 ### 3. Social Media App Setup
 
 #### Instagram (Facebook Graph API)
+
 1. Create a Facebook App at [developers.facebook.com](https://developers.facebook.com)
 2. Add Instagram Basic Display product
 3. Configure OAuth redirect URI: `https://yourdomain.com/api/social/oauth/callback`
 4. Get Client ID and Client Secret
 
 #### LinkedIn
+
 1. Create a LinkedIn App at [developer.linkedin.com](https://developer.linkedin.com)
 2. Add required scopes: `r_liteprofile`, `w_member_social`
 3. Configure OAuth redirect URI
 4. Get Client ID and Client Secret
 
 #### Facebook
+
 1. Use the same Facebook App from Instagram setup
 2. Add Facebook Login product
 3. Configure permissions: `pages_manage_posts`, `pages_read_engagement`
 
 #### Other Platforms
+
 Follow similar setup processes for TikTok, YouTube, and Pinterest.
 
 ### 4. Install Dependencies
@@ -160,47 +174,39 @@ yarn dev
 ### Connect Social Account
 
 ```typescript
-import { useSocialAccounts } from '@/lib/hooks/use-social-accounts'
+import { useSocialAccounts } from "@/lib/hooks/use-social-accounts";
 
 function ConnectAccount() {
-  const { connectAccount } = useSocialAccounts()
-  
+  const { connectAccount } = useSocialAccounts();
+
   const handleConnect = async () => {
-    await connectAccount('instagram', '/dashboard/social-accounts')
-  }
-  
-  return (
-    <button onClick={handleConnect}>
-      Connect Instagram
-    </button>
-  )
+    await connectAccount("instagram", "/dashboard/social-accounts");
+  };
+
+  return <button onClick={handleConnect}>Connect Instagram</button>;
 }
 ```
 
 ### Create and Publish Post
 
 ```typescript
-import { useSocialPosts } from '@/lib/hooks/use-social-posts'
+import { useSocialPosts } from "@/lib/hooks/use-social-posts";
 
 function CreatePost() {
-  const { createPost } = useSocialPosts()
-  
+  const { createPost } = useSocialPosts();
+
   const handlePublish = async () => {
     await createPost({
-      social_account_id: 'account-id',
-      platform: 'instagram',
-      content: 'Hello, world! 🌍',
-      media_urls: ['https://example.com/image.jpg'],
-      hashtags: ['hello', 'world'],
-      publish_immediately: true
-    })
-  }
-  
-  return (
-    <button onClick={handlePublish}>
-      Publish Post
-    </button>
-  )
+      social_account_id: "account-id",
+      platform: "instagram",
+      content: "Hello, world! 🌍",
+      media_urls: ["https://example.com/image.jpg"],
+      hashtags: ["hello", "world"],
+      publish_immediately: true,
+    });
+  };
+
+  return <button onClick={handlePublish}>Publish Post</button>;
 }
 ```
 
@@ -209,32 +215,36 @@ function CreatePost() {
 ```typescript
 const schedulePost = async () => {
   await createPost({
-    social_account_id: 'account-id',
-    platform: 'linkedin',
-    content: 'Scheduled post content',
-    scheduled_for: '2024-12-25T10:00:00Z'
-  })
-}
+    social_account_id: "account-id",
+    platform: "linkedin",
+    content: "Scheduled post content",
+    scheduled_for: "2024-12-25T10:00:00Z",
+  });
+};
 ```
 
 ## Security Best Practices
 
 ### 1. Token Security
+
 - Tokens should be encrypted at rest in production
 - Implement token rotation
 - Monitor token expiration
 
 ### 2. Rate Limiting
+
 - Implement API rate limiting
 - Respect platform rate limits
 - Use exponential backoff for retries
 
 ### 3. Data Validation
+
 - Validate all input data
 - Sanitize content before publishing
 - Check platform-specific requirements
 
 ### 4. Error Handling
+
 - Implement comprehensive error logging
 - Provide user-friendly error messages
 - Handle platform API errors gracefully
@@ -242,31 +252,37 @@ const schedulePost = async () => {
 ## Platform-Specific Considerations
 
 ### Instagram
+
 - Requires media for all posts
 - Maximum 10 media files per post
 - Content length limit: 2,200 characters
 
 ### LinkedIn
+
 - Supports text-only posts
 - Maximum 3,000 characters
 - Professional content focus
 
 ### Facebook
+
 - Flexible content types
 - Large character limit (63,206)
 - Page vs. personal account differences
 
 ### TikTok
+
 - Video-only platform
 - Short content descriptions
 - Requires video upload
 
 ### YouTube
+
 - Video platform
 - Longer descriptions supported
 - Requires video upload
 
 ### Pinterest
+
 - Image-focused platform
 - Pin descriptions
 - Board management
@@ -276,16 +292,19 @@ const schedulePost = async () => {
 ### Common Issues
 
 1. **OAuth Callback Errors**
+
    - Verify redirect URI configuration
    - Check state token validation
    - Ensure HTTPS in production
 
 2. **Token Expiration**
+
    - Implement automatic token refresh
    - Handle expired token errors
    - Provide re-authentication flow
 
 3. **Platform API Errors**
+
    - Check API credentials
    - Verify required permissions
    - Review platform-specific requirements
@@ -310,10 +329,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For support and questions:
+
 - Create an issue on GitHub
 - Check the documentation
 - Review the troubleshooting guide
 
 ---
 
-Built with ❤️ using Next.js and Supabase# Ai-media-posting
+change commit
