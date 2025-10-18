@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -159,15 +159,19 @@ export default function PostsPage() {
   };
 
   const getPlatformEmojis = (platforms: string[]) => {
-  const platformEmojis: Record<string, string> = {
-    instagram: '📸',
-    linkedin: '💼',
-    twitter: '🐦',
-    facebook: '📘',
-    tiktok: '🎵'
-  }
-  return platforms?.map(platform => platformEmojis[platform] ?? '📱').join(' ') || ''
-}
+    const platformEmojis: Record<string, string> = {
+      instagram: "📸",
+      linkedin: "💼",
+      twitter: "🐦",
+      facebook: "📘",
+      tiktok: "🎵",
+    };
+    return (
+      platforms
+        ?.map((platform) => platformEmojis[platform] ?? "📱")
+        .join(" ") || ""
+    );
+  };
 
   if (isLoading) {
     return (

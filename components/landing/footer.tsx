@@ -1,41 +1,61 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { Sparkles, Twitter, Linkedin, Instagram, Github } from 'lucide-react'
+import Link from "next/link";
+import { Sparkles, Twitter, Linkedin, Instagram, Github } from "lucide-react";
 
 const footerLinks = {
   product: [
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'API', href: '/api-docs' },
-    { name: 'Integrations', href: '/integrations' }
+    { name: "Features", href: "#features" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "API", href: "/api-docs" },
+    { name: "Integrations", href: "/integrations" },
   ],
   company: [
-    { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Contact', href: '/contact' }
+    { name: "About", href: "/about" },
+    { name: "Blog", href: "/blog" },
+    { name: "Careers", href: "/careers" },
+    { name: "Contact", href: "/contact" },
   ],
   support: [
-    { name: 'Help Center', href: '/help' },
-    { name: 'Documentation', href: '/docs' },
-    { name: 'Status', href: '/status' },
-    { name: 'Community', href: '/community' }
+    { name: "Help Center", href: "/help" },
+    { name: "Documentation", href: "/docs" },
+    { name: "Status", href: "/status" },
+    { name: "Community", href: "/community" },
   ],
   legal: [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Cookie Policy', href: '/cookies' },
-    { name: 'GDPR', href: '/gdpr' }
-  ]
-}
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
+    { name: "Cookie Policy", href: "/cookies" },
+    { name: "GDPR", href: "/gdpr" },
+  ],
+};
 
 const socialLinks = [
-  { name: 'Twitter', href: 'https://twitter.com/socialai', icon: Twitter, color: 'hover:bg-blue-500' },
-  { name: 'LinkedIn', href: 'https://linkedin.com/company/socialai', icon: Linkedin, color: 'hover:bg-blue-600' },
-  { name: 'Instagram', href: 'https://instagram.com/socialai', icon: Instagram, color: 'hover:bg-pink-500' },
-  { name: 'GitHub', href: 'https://github.com/socialai', icon: Github, color: 'hover:bg-gray-700' }
-]
+  {
+    name: "Twitter",
+    href: "https://twitter.com/socialai",
+    icon: Twitter,
+    color: "hover:bg-blue-500",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/company/socialai",
+    icon: Linkedin,
+    color: "hover:bg-blue-600",
+  },
+  {
+    name: "Instagram",
+    href: "https://instagram.com/socialai",
+    icon: Instagram,
+    color: "hover:bg-pink-500",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com/socialai",
+    icon: Github,
+    color: "hover:bg-gray-700",
+  },
+];
 
 export function Footer() {
   return (
@@ -45,7 +65,7 @@ export function Footer() {
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand */}
@@ -57,7 +77,8 @@ export function Footer() {
               <span className="text-xl font-bold">SocialAI</span>
             </Link>
             <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-              AI-powered social media management platform for creators and businesses.
+              AI-powered social media management platform for creators and
+              businesses.
             </p>
             <div className="flex space-x-3">
               {socialLinks.map((social) => (
@@ -80,7 +101,10 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block">
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -93,7 +117,10 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block">
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -106,7 +133,10 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block">
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -119,7 +149,10 @@ export function Footer() {
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block">
+                  <Link
+                    href={link.href}
+                    className="text-gray-300 hover:text-white transition-colors text-sm hover:translate-x-1 inline-block"
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -133,10 +166,10 @@ export function Footer() {
             © 2024 SocialAI. All rights reserved.
           </p>
           <p className="text-gray-300 text-sm mt-4 md:mt-0">
-            Made with ❤️ for creators worldwide
+            Made by @Dev-Waqar
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

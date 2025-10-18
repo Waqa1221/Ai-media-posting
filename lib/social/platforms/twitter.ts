@@ -13,23 +13,35 @@ const logTwitterOperation = (operation: string, data?: any) => {
 export class TwitterPlatform {
   private client: TwitterApi;
 
-  constructor(accessToken: string, accessSecret: string) {
-    if (!process.env.TWITTER_API_KEY || !process.env.TWITTER_API_SECRET) {
-      logTwitterOperation("Twitter API credentials not configured");
-      throw new Error("Twitter API credentials not configured");
-    }
-
+  constructor(accessToken: string, accessSecret?: string) {
     logTwitterOperation("Initializing Twitter platform client", {
       hasAccessToken: !!accessToken,
       hasAccessSecret: !!accessSecret,
       environment: process.env.NODE_ENV,
     });
-    this.client = new TwitterApi({
-      appKey: process.env.TWITTER_API_KEY!,
-      appSecret: process.env.TWITTER_API_SECRET!,
-      accessToken,
-      accessSecret,
-    });
+
+    // Check if this is OAuth 2.0 (Bearer token) or OAuth 1.0a
+    // OAuth 2.0 tokens are longer (typically JWT format)
+    const isOAuth2 = accessToken.length > 50 && !accessSecret;
+
+    if (isOAuth2) {
+      // OAuth 2.0 - use Bearer token directly
+      logTwitterOperation("Using OAuth 2.0 (Bearer token)");
+      this.client = new TwitterApi(accessToken);
+    } else {
+      // OAuth 1.0a - use app credentials + user tokens
+      if (!process.env.TWITTER_API_KEY || !process.env.TWITTER_API_SECRET) {
+        logTwitterOperation("Twitter API credentials not configured");
+        throw new Error("Twitter API credentials not configured");
+      }
+      logTwitterOperation("Using OAuth 1.0a (app + user credentials)");
+      this.client = new TwitterApi({
+        appKey: process.env.TWITTER_API_KEY!,
+        appSecret: process.env.TWITTER_API_SECRET!,
+        accessToken,
+        accessSecret: accessSecret || "",
+      });
+    }
   }
 
   async validateConnection(): Promise<boolean> {

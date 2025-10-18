@@ -18,32 +18,77 @@ export async function GET(
     }
 
     const { data: post, error } = await supabase
-      .from("social_posts")
-      .select(
-        `
-        *,
-        social_accounts!inner(
-          platform,
-          username,
-          display_name,
-          avatar_url
-        )
-      `
-      )
+      .from("posts")
+      .select("*")
       .eq("id", params.id)
       .eq("user_id", user.id)
       .single();
 
     if (error || !post) {
-      return NextResponse.json(
-        { error: "Social post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     return NextResponse.json(post);
   } catch (error) {
     console.error("Social post fetch error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const updateData = await request.json();
+
+    // Get the post first
+    const { data: post, error: fetchError } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("id", params.id)
+      .eq("user_id", user.id)
+      .single();
+
+    if (fetchError || !post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    // Update the post
+    const { data: updatedPost, error: updateError } = await supabase
+      .from("posts")
+      .update({
+        ...updateData,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", params.id)
+      .eq("user_id", user.id)
+      .select()
+      .single();
+
+    if (updateError) {
+      return NextResponse.json(
+        { error: "Failed to update post" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(updatedPost);
+  } catch (error) {
+    console.error("Post update error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -70,22 +115,14 @@ export async function PATCH(
 
     // Get the post
     const { data: post, error: fetchError } = await supabase
-      .from("social_posts")
-      .select(
-        `
-        *,
-        social_accounts!inner(*)
-      `
-      )
+      .from("posts")
+      .select("*")
       .eq("id", params.id)
       .eq("user_id", user.id)
       .single();
 
     if (fetchError || !post) {
-      return NextResponse.json(
-        { error: "Social post not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     if (action === "publish") {
@@ -380,24 +417,24 @@ export async function DELETE(
     }
 
     const { error } = await supabase
-      .from("social_posts")
+      .from("posts")
       .delete()
       .eq("id", params.id)
       .eq("user_id", user.id);
 
     if (error) {
-      console.error("Error deleting social post:", error);
+      console.error("Error deleting post:", error);
       return NextResponse.json(
-        { error: "Failed to delete social post" },
+        { error: "Failed to delete post" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
-      message: "Social post deleted successfully",
+      message: "Post deleted successfully",
     });
   } catch (error) {
-    console.error("Social post deletion error:", error);
+    console.error("Post deletion error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
