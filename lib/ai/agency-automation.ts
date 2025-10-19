@@ -349,7 +349,6 @@ export class AIMarketingAgency {
       created_at: new Date().toISOString(),
     });
   }
-
   private async generatePerformanceInsights(posts: any[]): Promise<any> {
     if (posts.length === 0) return { message: "No recent posts to analyze" };
 

@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Calendar as CalendarIcon, Sparkles } from 'lucide-react'
-import { PostScheduler } from '@/components/scheduler/post-scheduler'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import Link from 'next/link'
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Calendar as CalendarIcon, Sparkles } from "lucide-react";
+import { PostScheduler } from "@/components/scheduler/post-scheduler";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import Link from "next/link";
 
 export default function SchedulerPage() {
-  const [initialData, setInitialData] = useState<any>(null)
-  const searchParams = useSearchParams()
+  const [initialData, setInitialData] = useState<any>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Check for AI content in URL params
-    const aiContent = searchParams.get('ai-content')
+    const aiContent = searchParams.get("ai-content");
     if (aiContent) {
       try {
-        const parsedContent = JSON.parse(decodeURIComponent(aiContent))
+        const parsedContent = JSON.parse(decodeURIComponent(aiContent));
         setInitialData({
-          content: parsedContent.caption || '',
+          content: parsedContent.caption || "",
           hashtags: parsedContent.hashtags || [],
-          title: parsedContent.caption?.substring(0, 50) + '...' || '',
+          title: parsedContent.caption?.substring(0, 50) + "..." || "",
           aiGenerated: true,
-          aiPrompt: JSON.stringify(parsedContent)
-        })
+          aiPrompt: JSON.stringify(parsedContent),
+        });
       } catch (error) {
-        console.error('Error parsing AI content:', error)
+        console.error("Error parsing AI content:", error);
       }
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   return (
     <div className="container max-w-4xl mx-auto py-8 px-4">
@@ -41,7 +41,7 @@ export default function SchedulerPage() {
             Back to Posts
           </Link>
         </Button>
-        
+
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <CalendarIcon className="w-8 h-8" />
           Schedule Post
@@ -54,22 +54,23 @@ export default function SchedulerPage() {
           <Alert className="mt-4">
             <Sparkles className="h-4 w-4" />
             <AlertDescription>
-              AI-generated content loaded! You can customize it before scheduling.
+              AI-generated content loaded! You can customize it before
+              scheduling.
             </AlertDescription>
           </Alert>
         )}
       </div>
 
-      <PostScheduler 
+      <PostScheduler
         initialData={initialData}
         onComplete={(post) => {
           // Redirect to post detail page
-          window.location.href = `/dashboard/posts/${post.id}`
+          window.location.href = `/dashboard/posts/${post.id}`;
         }}
         onCancel={() => {
-          window.location.href = '/dashboard/posts'
+          window.location.href = "/dashboard/posts";
         }}
       />
     </div>
-  )
+  );
 }
